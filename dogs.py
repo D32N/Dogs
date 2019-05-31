@@ -87,39 +87,23 @@ def read():
 
 	return jsonify(response)
 
-@app.route('/dogs/api/v1/updatedogs/regstatus', methods=["PUT"])
+@app.route('/dogs/api/v1/updatedogs/regstatus/', methods=["PUT"])
 def update_regstatus():
+	print("FUNCTION: UPDATE_REGSTATUS/PUT")
 	data = request.form
-
-	# sd_name = data['sd_name']
 	sd_regstatus = data['sd_regstatus']
-	# sd_teamstatus = data['sd_teamstatus']
-	# sd_vaccstatus = data['sd_vaccstatus']
-	# sd_vaccexpiredate = data['sd_vaccexpiredate']
-	# sd_pedigree = data['sd_pedigree']
 	sd_regid = data['sd_regid']
-
-	# sd_name = data['sd_name']
-	# sd_teamstatus = data['sd_teamstatus']
-	# sd_vaccstatus = data['sd_vaccstatus']
-	# sd_vaccexpiredate = data['sd_vaccexpiredate']
-	# sd_pedigree = data['sd_pedigree']
-
-	#print(sd_name, sd_regstatus,sd_teamstatus, sd_vaccstatus, sd_vaccexpiredate, sd_pedigree)
-	dog_present = dogs_collection.find_one({"sd_regid": sd_regid}, {'sd_name': 1})
-	if dog_present:
-		sd_name = dog_present['sd_name']
-		sd_teamstatus = dog_present['sd_teamstatus']
-		sd_vaccstatus = dog_present['sd_vaccstatus']
-		sd_vaccexpiredate = dog_present['sd_vaccexpiredate']
-		sd_pedigree = dog_present['sd_pedigree']
-
-		dogs_collection.find_one_and_replace({"sd_regid": sd_regid}, {'sd_name': sd_name,
+	dog_details = dogs_collection.find_one({'sd_regid': sd_regid}, {'sd_regid': 1, 'sd_name': 1, 'sd_regstatus': 1,
+																	'sd_teamstatus': 1, 'sd_vaccstatus': 1,
+																	'sd_vaccexpiredate':
+																		1, 'sd_pedigree': 1})
+	if dog_details:
+		dogs_collection.find_one_and_replace({"sd_regid": sd_regid}, {'sd_name': dog_details['sd_name'],
 																	  "sd_regid": sd_regid,
-																	  "sd_teamstatus": sd_teamstatus,
-																	  "sd_vaccstatus":sd_vaccstatus,
-																	  "sd_vaccexpiredate":sd_vaccexpiredate,
-																	  "sd_pedigree":sd_pedigree,
+																	  "sd_teamstatus": dog_details['sd_teamstatus'],
+																	  "sd_vaccstatus":dog_details['sd_vaccstatus'],
+																	  "sd_vaccexpiredate":dog_details['sd_vaccexpiredate'],
+																	  "sd_pedigree":dog_details['sd_pedigree'],
 																	  "sd_regstatus":sd_regstatus})
 		# dogs_collection.insert_one({'sd_regid': sd_regid,
 		# 							'sd_name': sd_name,
@@ -128,12 +112,73 @@ def update_regstatus():
 		# 							'sd_vaccstatus': sd_vaccstatus,
 		# 							'sd_vaccexpiredate': sd_vaccexpiredate,
 		# 							'sd_pedigree': sd_pedigree})
-		response = {'status': "Dog added to database.", 'code': 100}
+		response = {'status': "Dog registration status updated.", 'code': 100}
 	else:
-		response = {'status': "Dog already in database, not added.", 'code': 101}
+		response = {'status': "Dog not in database.", 'code': 101}
 
 	return jsonify(response)
 
+@app.route('/dogs/api/v1/updatedogs/teamstatus/', methods=["PUT"])
+def update_teamstatus():
+	print("FUNCTION: UPDATE_TEAMSTATUS/PUT")
+	data = request.form
+	sd_teamstatus = data['sd_teamstatus']
+	sd_regid = data['sd_regid']
+	dog_details = dogs_collection.find_one({'sd_regid': sd_regid}, {'sd_regid': 1, 'sd_name': 1, 'sd_regstatus': 1,
+																	'sd_teamstatus': 1, 'sd_vaccstatus': 1,
+																	'sd_vaccexpiredate':
+																		1, 'sd_pedigree': 1})
+	if dog_details:
+		dogs_collection.find_one_and_replace({"sd_regid": sd_regid}, {'sd_name': dog_details['sd_name'],
+																	  "sd_regid": sd_regid,
+																	  "sd_teamstatus": sd_teamstatus,
+																	  "sd_vaccstatus":dog_details['sd_vaccstatus'],
+																	  "sd_vaccexpiredate":dog_details['sd_vaccexpiredate'],
+																	  "sd_pedigree":dog_details['sd_pedigree'],
+																	  "sd_regstatus":dog_details['sd_regstatus']})
+		# dogs_collection.insert_one({'sd_regid': sd_regid,
+		# 							'sd_name': sd_name,
+		# 							'sd_regstatus': sd_regstatus,
+		# 							'sd_teamstatus': sd_teamstatus,
+		# 							'sd_vaccstatus': sd_vaccstatus,
+		# 							'sd_vaccexpiredate': sd_vaccexpiredate,
+		# 							'sd_pedigree': sd_pedigree})
+		response = {'status': "Dog team status updated.", 'code': 100}
+	else:
+		response = {'status': "Dog not in database.", 'code': 101}
+
+	return jsonify(response)
+
+@app.route('/dogs/api/v1/updatedogs/sd_vaccexpiredate/', methods=["PUT"])
+def update_vaccexpiredate():
+	print("FUNCTION: UPDATE_VACEXPIREDATA/PUT")
+	data = request.form
+	sd_vaccexpiredate = data['sd_vaccexpiredate']
+	sd_regid = data['sd_regid']
+	dog_details = dogs_collection.find_one({'sd_regid': sd_regid}, {'sd_regid': 1, 'sd_name': 1, 'sd_regstatus': 1,
+																	'sd_teamstatus': 1, 'sd_vaccstatus': 1,
+																	'sd_vaccexpiredate':
+																		1, 'sd_pedigree': 1})
+	if dog_details:
+		dogs_collection.find_one_and_replace({"sd_regid": sd_regid}, {'sd_name': dog_details['sd_name'],
+																	  "sd_regid": sd_regid,
+																	  "sd_teamstatus": dog_details['sd_teamstatus'],
+																	  "sd_vaccstatus":dog_details['sd_vaccstatus'],
+																	  "sd_vaccexpiredate":sd_vaccexpiredate,
+																	  "sd_pedigree":dog_details['sd_pedigree'],
+																	  "sd_regstatus":dog_details['sd_regstatus']})
+		# dogs_collection.insert_one({'sd_regid': sd_regid,
+		# 							'sd_name': sd_name,
+		# 							'sd_regstatus': sd_regstatus,
+		# 							'sd_teamstatus': sd_teamstatus,
+		# 							'sd_vaccstatus': sd_vaccstatus,
+		# 							'sd_vaccexpiredate': sd_vaccexpiredate,
+		# 							'sd_pedigree': sd_pedigree})
+		response = {'status': "Dog vaccination expiry data updated.", 'code': 100}
+	else:
+		response = {'status': "Dog not in database.", 'code': 101}
+
+	return jsonify(response)
 
 if __name__ == "__main__":
 	app.run(debug=False, host='127.0.0.1', port=int(os.getenv('PORT', '5000')))
