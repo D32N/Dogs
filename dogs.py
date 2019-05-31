@@ -39,7 +39,6 @@ def create():
 	sd_regid = data['sd_regid']
 
 	dog_present = dogs_collection.find_one({"sd_regid": sd_regid}, {'sd_name': 1})
-	print(dog_present, sd_regid)
 	if not dog_present:
 		dogs_collection.insert_one({'sd_regid': sd_regid,
 									'sd_name': sd_name,
@@ -62,8 +61,6 @@ def read():
 	dog_details = dogs_collection.find_one({'sd_regid': sd_regid}, {'sd_regid': 1,'sd_name': 1,'sd_regstatus': 1,
 														   'sd_teamstatus': 1,'sd_vaccstatus': 1,'sd_vaccexpiredate':
 															   1,'sd_pedigree': 1})
-	print(sd_regid, "dog_details:",dog_details)
-
 	if dog_details:
 		print("in_dog_details")
 		sd_regid = int(dog_details['sd_regid'])
