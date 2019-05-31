@@ -1,7 +1,7 @@
 # POST = request.args, use params
-# PUT = request.forms
+# PUT = request.forms, use body
 # GET = request.args, use params
-#
+# DELETE = request.forms, use body
 
 from flask import Flask, jsonify, request
 import os, json
@@ -167,17 +167,28 @@ def update_vaccexpiredate():
 																	  "sd_vaccexpiredate":sd_vaccexpiredate,
 																	  "sd_pedigree":dog_details['sd_pedigree'],
 																	  "sd_regstatus":dog_details['sd_regstatus']})
-		# dogs_collection.insert_one({'sd_regid': sd_regid,
-		# 							'sd_name': sd_name,
-		# 							'sd_regstatus': sd_regstatus,
-		# 							'sd_teamstatus': sd_teamstatus,
-		# 							'sd_vaccstatus': sd_vaccstatus,
-		# 							'sd_vaccexpiredate': sd_vaccexpiredate,
-		# 							'sd_pedigree': sd_pedigree})
 		response = {'status': "Dog vaccination expiry data updated.", 'code': 100}
 	else:
 		response = {'status': "Dog not in database.", 'code': 101}
 
+	return jsonify(response)
+
+@app.route('/dogs/api/v1/deletedog/', methods=["DELETE"])
+def delete_dog():
+	data = request.form
+	print("FUNCTION: DELETE/DELETE")
+	sd_regid = data['sd_regid']
+	print(sd_regid)
+	dog_details = dogs_collection.find_one({'sd_regid': str(sd_regid)})
+	print(dog_details)
+
+	if dog_details:
+		print("dog found")
+		dogs_collection.delete_one({'sd_regid':sd_regid})
+		response = {'status': "Dog deleted from database.", 'code': 100}
+	else:
+		print("dog not found")
+		response = {'status': "Dog not in database.", 'code': 101}
 	return jsonify(response)
 
 if __name__ == "__main__":
