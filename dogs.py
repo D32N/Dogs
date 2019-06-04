@@ -1,6 +1,6 @@
 # POST = request.args, use params
-# PUT = request.forms, use body
 # GET = request.args, use params
+# PUT = request.forms, use body
 # DELETE = request.forms, use body
 
 from flask import Flask, jsonify, request
@@ -26,7 +26,7 @@ dogs_db = client[DB_NAME]
 COL_NAME = "dogs_details"
 dogs_collection = dogs_db[COL_NAME]
 
-@app.route('/dogs/api/v1/createdog', methods=["POST"])
+@app.route('/api/v1/createdog/', methods=["POST"])
 def create():
 	print("FUNCTION: CREATE/PUT")
 	data = request.args
@@ -53,7 +53,7 @@ def create():
 
 	return jsonify(response)
 
-@app.route('/dogs/api/v1/readdog/', methods=["GET"])
+@app.route('/api/v1/readdog/', methods=["GET"])
 def read():
 	print("FUNCTION: READ/GET")
 	req = request.args  # Put all passed parameters in a dictionary
@@ -84,7 +84,7 @@ def read():
 
 	return jsonify(response)
 
-@app.route('/dogs/api/v1/updatedogs/regstatus/', methods=["PUT"])
+@app.route('/api/v1/updatedogs/regstatus/', methods=["PUT"])
 def update_regstatus():
 	print("FUNCTION: UPDATE_REGSTATUS/PUT")
 	data = request.form
@@ -115,7 +115,7 @@ def update_regstatus():
 
 	return jsonify(response)
 
-@app.route('/dogs/api/v1/updatedogs/teamstatus/', methods=["PUT"])
+@app.route('/api/v1/updatedogs/teamstatus/', methods=["PUT"])
 def update_teamstatus():
 	print("FUNCTION: UPDATE_TEAMSTATUS/PUT")
 	data = request.form
@@ -146,7 +146,7 @@ def update_teamstatus():
 
 	return jsonify(response)
 
-@app.route('/dogs/api/v1/updatedogs/sd_vaccexpiredate/', methods=["PUT"])
+@app.route('/api/v1/updatedogs/sd_vaccexpiredate/', methods=["PUT"])
 def update_vaccexpiredate():
 	print("FUNCTION: UPDATE_VACEXPIREDATA/PUT")
 	data = request.form
@@ -170,7 +170,7 @@ def update_vaccexpiredate():
 
 	return jsonify(response)
 
-@app.route('/dogs/api/v1/deletedog/', methods=["DELETE"])
+@app.route('/api/v1/deletedog/', methods=["DELETE"])
 def delete_dog():
 	data = request.form
 	print("FUNCTION: DELETE/DELETE")
@@ -189,4 +189,4 @@ def delete_dog():
 	return jsonify(response)
 
 if __name__ == "__main__":
-	app.run(debug=False, host='0.0.0.0', port=int(os.getenv('PORT', '5000')))
+	app.run(debug=False, host='0.0.0.0', port=int(os.getenv('PORT', '5000')), threaded=True)
